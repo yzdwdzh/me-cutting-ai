@@ -91,7 +91,11 @@ st.title("🏗️ AI 驱动：管材切割与拼接助手")
 
 # 侧边栏：API 设置和参数
 st.sidebar.header("配置")
-api_key = st.sidebar.text_input("DeepSeek API Key", type="password")  # 建议必填
+# 优先从 Secrets 读取，如果没有配置，则从侧边栏读取
+if "DEEPSEEK_API_KEY" in st.secrets:
+    api_key = st.secrets["DEEPSEEK_API_KEY"]
+else:
+    api_key = st.sidebar.text_input("DeepSeek API Key", type="password")
 kerf = st.sidebar.number_input("锯缝宽度 (m)", value=0.003, min_value=0.000, step=0.001, format="%.3f")
 stock_options = [float(s.strip()) for s in st.sidebar.text_input("可选原材(m)", value="6.0, 9.0, 12.0").split(",")]
 
